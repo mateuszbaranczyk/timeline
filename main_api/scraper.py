@@ -24,7 +24,11 @@ class ArticleScraper:
 
     def bbc(self, html: bytes) -> str:
         soup = BeautifulSoup(html, "html.parser")
-        return soup.article.get_text()
+        try:
+            text = soup.article.get_text()
+        except AttributeError:
+            return ''
+        return text
 
     def get_html(self, url: str) -> bytes:
         try:
