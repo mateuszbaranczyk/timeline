@@ -24,7 +24,7 @@ class Article(TypedDict):
 
 class NewsApi:
     def __init__(self):
-        api_key = os.getenv("NEWS_API_KEY")
+        api_key = os.getenv("NEWS_API_KEY", "")
         self.client = NewsApiClient(api_key)
 
     def get_articles(self, topic: str) -> list[Article] | dict:
@@ -33,6 +33,7 @@ class NewsApi:
                 q=topic,
                 sources=sources,
                 language="en",
+                page_size=50,
             )["articles"]
         except (NewsAPIException, KeyError) as e:
             return {"error": str(e)}
