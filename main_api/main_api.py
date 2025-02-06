@@ -28,7 +28,6 @@ def get_topic(topic: str):
     elements = [TimelineElement(article) for article in articles]
     timeline = [
         {
-            "content": element.content,
             "summary": element.summary,
             "pub_date": element.pub_date,
             "url": element.url,
@@ -36,4 +35,4 @@ def get_topic(topic: str):
         }
         for element in elements
     ]
-    return timeline
+    return [entry for entry in timeline if entry["summary"]]
