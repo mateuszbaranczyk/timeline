@@ -1,13 +1,24 @@
+import logging
 from fastapi import FastAPI
 from news import NewsApi
 from scraper import ArticleScraper
 from logs import setup_logger
+from fastapi.middleware.cors import CORSMiddleware
 
 setup_logger()
+log = logging.getLogger(__name__)
 app = FastAPI()
 news = NewsApi()
 scraper = ArticleScraper()
 
+origins = ['*']
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 class TimelineElement:
     def __init__(self, article):
@@ -30,4 +41,6 @@ def get_topic(topic: str):
         }
         for element in elements
     ]
-    return [entry for entry in timeline if entry["content"]]
+    filtered = [entry for entry in timeline if entry["content"]]
+    log.info(f"Returning {len(filtered)} articles for topic {topic}")
+    return filtered
