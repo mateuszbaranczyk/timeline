@@ -1,13 +1,12 @@
 from fastapi import FastAPI
 from news import NewsApi
 from scraper import ArticleScraper
-from model_adapter import ModelAdapter
+from logs import setup_logger
 
-
+setup_logger()
 app = FastAPI()
 news = NewsApi()
 scraper = ArticleScraper()
-model = ModelAdapter()
 
 
 class TimelineElement:
@@ -17,9 +16,6 @@ class TimelineElement:
         self.url = article["url"]
         self.source = article["source"]["name"]
 
-    @property
-    def summary(self):
-        return model.summarize(self.content)
 
 
 @app.get("/topic/{topic}")
@@ -28,11 +24,11 @@ def get_topic(topic: str):
     elements = [TimelineElement(article) for article in articles]
     timeline = [
         {
-            "summary": element.summary,
             "pub_date": element.pub_date,
             "url": element.url,
             "source": element.source,
+            "content": element.content
         }
         for element in elements
     ]
-    return [entry for entry in timeline if entry["summary"]]
+    return [entry for entry in timeline if entry["content"]]
