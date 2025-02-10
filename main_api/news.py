@@ -5,6 +5,10 @@ import os
 from typing import TypedDict
 from setup import sources
 
+from logging import getLogger
+
+log = getLogger(__name__)
+
 
 class Source(TypedDict):
     id: str
@@ -33,8 +37,9 @@ class NewsApi:
                 q=topic,
                 sources=sources,
                 language="en",
-                page_size=50,
+                page_size=30,
             )["articles"]
         except (NewsAPIException, KeyError) as e:
+            log.info(f"Failed to get articles for {topic}")
             return {"error": str(e)}
         return articles
