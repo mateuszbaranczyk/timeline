@@ -3,6 +3,10 @@ from setup import sources
 from news import Article
 import requests
 
+from logging import getLogger
+
+log = getLogger(__name__)
+
 
 class ScraperException(Exception):
     pass
@@ -27,7 +31,8 @@ class ArticleScraper:
         try:
             text = soup.article.get_text()
         except AttributeError:
-            return ''
+            log.info("Failed to parse article")
+            return ""
         return text
 
     def get_html(self, url: str) -> bytes:
@@ -40,3 +45,15 @@ class ArticleScraper:
                 f"Failed to fetch article: Status {response.status_code}"
             )
         return response.content
+
+    def make_json_friendly(self, text):
+        text = text.replace("\\", "\\\\").replace('"', '\\"')
+        text = (
+            text.replace("\n", "")
+            .replace("\r", "")
+            .replace("\t", "")
+            .replace("\b", "")
+            .replace("\f", "")
+        )
+        text = text.replace("/", "\\/")
+        return text
