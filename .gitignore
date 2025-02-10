@@ -1,5 +1,5 @@
 # Byte-compiled / optimized / DLL files
-*/__pycache__/
+*/__pycache__
 *.py[cod]
 *$py.class
 
@@ -169,4 +169,4 @@ docker-compose.yaml
 poetry.lock
 
 /.ruff_cache
-main_api/__pycache__/main_api.cpython-312.pyc
+main_api/__pycache__/*
