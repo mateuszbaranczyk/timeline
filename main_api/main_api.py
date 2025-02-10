@@ -17,7 +17,6 @@ class TimelineElement:
         self.source = article["source"]["name"]
 
 
-
 @app.get("/topic/{topic}")
 def get_topic(topic: str):
     articles = news.get_articles(topic)
@@ -27,7 +26,7 @@ def get_topic(topic: str):
             "pub_date": element.pub_date,
             "url": element.url,
             "source": element.source,
-            "content": element.content
+            "content": element.content,
         }
         for element in elements
     ]
